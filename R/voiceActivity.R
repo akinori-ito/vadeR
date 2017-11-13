@@ -3,7 +3,7 @@
 #' @importFrom tuneR melfcc
 #' @importFrom stats kmeans
 #' @export
-#' @param x The input Wave object
+#' @param x The input Wave object or a matrix obtained by melfcc()
 #' @param minlen Minimum duration of silence (number of frames)
 #' @param nclust Number of clusters, one of which should be silent
 #' @param frameshift The frame shift (sec), 10ms by default
@@ -16,7 +16,11 @@
 #'}
 
 voiceActivity <- function(x,minlen=20,nclust=3,frameshift=0.01) {
-    xf <- melfcc(x,hoptime=frameshift)
+    if (class(x) == "Wave") {
+        xf <- melfcc(x,hoptime=frameshift)
+    } else {
+        xf <- x
+    }
     cls <- kmeans(xf,nclust)
     pow <- c(0,0)
     for (cl in 1:nclust) {
