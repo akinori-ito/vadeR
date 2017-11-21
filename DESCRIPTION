@@ -4,7 +4,7 @@ Version: 0.0.1
 Authors@R: person("Akinori", "Ito", email = "aito@fw.ipsj.or.jp", role = c("aut", "cre"))
 Description: Performs the voice activity detection.
 Depends:
-    R (>= 3.4.2)
+    R (>= 3.4.0)
 License: LGPL-3
 Encoding: UTF-8
 LazyData: true
