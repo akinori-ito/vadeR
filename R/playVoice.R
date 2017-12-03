@@ -10,18 +10,10 @@
 #' playVoice(x)
 #'}
 playVoice <- function(x) {
-    v <- voiceActivity(x)
-    vle <- rle(v)
-    n <- length(vle$lengths)
-    b <- 0
-    for (i in 1:n) {
-        e <- b+vle$lengths[i]
-        if (vle$values[i]) {
-            y <- extractWave(x,from=b/100,to=e/100,xunit="time")
-            play(y)
-        }
-        b <- e+1
+    seg <- voiceSegment(x,unit="time")
+    for (i in 1:nrow(seg)) {
+        y <- extractWave(x,from=seg$begin[i],to=seg$end[i],xunit="time")
+        play(y)
     }
-    vle
 }
 

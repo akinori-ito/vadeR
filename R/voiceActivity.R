@@ -48,7 +48,7 @@ voiceActivity <- function(x,minlen=20,nclust=3,frameshift=0.01) {
         }
         j <- j+dur$lengths[i]
     }
-#    plot(xf[,1],col=as.integer(seg.valid)+1)
+    attr(seg.valid,"frameshift") <- frameshift
     seg.valid
 }
 
