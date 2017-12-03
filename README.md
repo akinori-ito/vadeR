@@ -16,7 +16,7 @@ library(tuneR)
   [25] FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
   ...
   [289]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-> voiceSegment(v,unit="time")
+> voiceSegment(v)
   begin end
 1    28 131
 2   156 291
