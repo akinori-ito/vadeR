@@ -8,7 +8,7 @@ This function takes the Wave object and returns an array of the voice activity.}
 voiceActivity(x, minlen = 20, nclust = 3, frameshift = 0.01)
 }
 \arguments{
-\item{x}{The input Wave object}
+\item{x}{The input Wave object or a matrix obtained by melfcc()}
 
 \item{minlen}{Minimum duration of silence (number of frames)}
 

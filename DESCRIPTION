@@ -1,7 +1,9 @@
 Package: vadeR
 Title: Voice Activity Detection
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: person("Akinori", "Ito", email = "aito@fw.ipsj.or.jp", role = c("aut", "cre"))
+Author: Akinori Ito
+Maintainer: Akinori Ito <aito@fw.ipsj.or.jp>
 Description: Performs the voice activity detection.
 Depends:
     R (>= 3.0.0)

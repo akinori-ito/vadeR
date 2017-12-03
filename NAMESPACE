@@ -2,6 +2,7 @@
 
 export(playVoice)
 export(voiceActivity)
+export(voiceSegment)
 importFrom(stats,kmeans)
 importFrom(tuneR,extractWave)
 importFrom(tuneR,melfcc)
