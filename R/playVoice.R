@@ -10,7 +10,7 @@
 #' playVoice(x)
 #'}
 playVoice <- function(x) {
-    seg <- voiceSegment(x,unit="time")
+    seg <- voiceSegment(x,unit="time",margin=0.3)
     for (i in 1:nrow(seg)) {
         y <- extractWave(x,from=seg$begin[i],to=seg$end[i],xunit="time")
         play(y)
