@@ -4,6 +4,7 @@
 #' @param x The input Wave object or vector of logical
 #' @param unit The unit of the result. "frame" (default) means the number of frames, and "time" means the duration time in second.
 #' @param frameshift The frame shift (in second). This parameter is used only when x is a Wave object.
+#' @param margin Margin to be added before and after a segment
 #' @examples
 #' \dontrun{
 #' library(tuneR)
@@ -11,7 +12,7 @@
 #' v <- voiceActivity(x)
 #' seg <- voiceSegment(v)
 #'}
-voiceSegment <- function(x,unit="frame",frameshift=0.01) {
+voiceSegment <- function(x,unit="frame",frameshift=0.01,margin=0) {
     if (class(x) == "Wave") {
         x <- voiceActivity(x,frameshift=frameshift)
     }
@@ -33,5 +34,7 @@ voiceSegment <- function(x,unit="frame",frameshift=0.01) {
         res$begin <- res$begin*attr(x,"frameshift")
         res$end <- res$end*attr(x,"frameshift")
     }
+    res$begin <- res$begin-margin
+    res$end <- res$end+margin
     res
 }
