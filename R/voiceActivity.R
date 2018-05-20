@@ -16,7 +16,7 @@
 #' act <- voiceActivity(x)
 #'}
 
-voiceActivity <- function(x,minlen=50,maxlen=1000,nclust=3,frameshift=0.01) {
+voiceActivity <- function(x,minlen=50,maxlen=1000,nclust=4,frameshift=0.01) {
     if (class(x) == "Wave") {
         xf <- melfcc(x,hoptime=frameshift,dither=T)
     } else {
