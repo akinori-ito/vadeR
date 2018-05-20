@@ -13,7 +13,7 @@
 #'}
 voiceSegment <- function(x,unit="frame",frameshift=0.01) {
     if (class(x) == "Wave") {
-        x <- voiceActivity(x,frameshift)
+        x <- voiceActivity(x,frameshift=frameshift)
     }
     vle <- rle(as.vector(x))
     n <- length(vle$lengths)
