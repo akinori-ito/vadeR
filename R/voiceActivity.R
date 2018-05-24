@@ -16,7 +16,7 @@
 #' act <- voiceActivity(x)
 #'}
 
-voiceActivity <- function(x,minlen=50,maxlen=1000,nclust=4,frameshift=0.01) {
+voiceActivity <- function(x,simple=TRUE,minlen=50,maxlen=1000,nclust=4,frameshift=0.01) {
     if (class(x) == "Wave") {
         xf <- melfcc(x,hoptime=frameshift,dither=T)
     } else {
@@ -33,6 +33,41 @@ voiceActivity <- function(x,minlen=50,maxlen=1000,nclust=4,frameshift=0.01) {
     # the cluster with the least power should be the silence
     i.silent <- which.min(pow)
 
+    if (simple) {
+        r <- vadeR_simple(cls,i.silent,minlen)
+    } else {
+        r <- vadeR_heavy(cls,i.silent,minlen,maxlen)
+    }
+    attr(r,"frameshift") <- frameshift
+    r
+}
+
+vadeR_simple <- function(cls,i.silent,minlen) {
+    dur <- rle(cls$cluster)
+    nsegment <- length(dur$lengths)
+    for (i in 1:nsegment) {
+        if (dur$lengths[i] < minlen & dur$values[i] == i.silent) {
+            if (i == 1) {
+                dur$values[i] <- dur$values[i+1]
+            } else if (dur$value[i] != dur$value[i-1]) {
+                dur$values[i] <- dur$values[i-1]
+            }
+        }
+    }
+    seg.valid <- rep(TRUE,nsegment)
+    j <- 1
+    for (i in 1:nsegment) {
+        if (dur$values[i] == i.silent) {
+            seg.valid[j:(j+dur$lengths[i]-1)] <- FALSE
+        } else {
+            seg.valid[j:(j+dur$lengths[i]-1)] <- TRUE
+        }
+        j <- j+dur$lengths[i]
+    }
+    seg.valid
+}
+
+vadeR_heavy <- function(cls,i.silent,minlen,maxlen) {
     # Caluculate the optimum segmentation with restriction of 
     # minimum and maximum length of the segment
     # Find the segmentation where each segment satisfies the length constraint
@@ -93,7 +128,5 @@ voiceActivity <- function(x,minlen=50,maxlen=1000,nclust=4,frameshift=0.01) {
       }
    }
    r <- r==2
-   attr(r,"frameshift") <- frameshift
-   r
 }
 
