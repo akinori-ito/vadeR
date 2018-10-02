@@ -5,10 +5,12 @@
 \title{playVoice
 This function takes the Wave object and plays only the speech parts, segment by segment, using tuneR::play() function.}
 \usage{
-playVoice(x)
+playVoice(x, seg = NA)
 }
 \arguments{
 \item{x}{The input Wave object}
+
+\item{seg}{Segmentation obtained by voiceSegment(..,unit="time")}
 }
 \description{
 playVoice
@@ -21,4 +23,3 @@ x <- readWave("speech.wav")
 playVoice(x)
 }
 }
-

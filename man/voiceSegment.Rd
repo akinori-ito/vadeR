@@ -5,7 +5,7 @@
 \title{voiceSegment
 This function takes the Wave object or the result of voiceActivity() and returns a data frame of the voice segment.}
 \usage{
-voiceSegment(x, unit = "frame", frameshift = 0.01)
+voiceSegment(x, unit = "frame", frameshift = 0.01, margin = 0)
 }
 \arguments{
 \item{x}{The input Wave object or vector of logical}
@@ -13,6 +13,8 @@ voiceSegment(x, unit = "frame", frameshift = 0.01)
 \item{unit}{The unit of the result. "frame" (default) means the number of frames, and "time" means the duration time in second.}
 
 \item{frameshift}{The frame shift (in second). This parameter is used only when x is a Wave object.}
+
+\item{margin}{Margin to be added before and after a segment}
 }
 \description{
 voiceSegment
@@ -26,4 +28,3 @@ v <- voiceActivity(x)
 seg <- voiceSegment(v)
 }
 }
-

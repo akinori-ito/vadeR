@@ -5,12 +5,15 @@
 \title{voiceActivity
 This function takes the Wave object and returns an array of the voice activity.}
 \usage{
-voiceActivity(x, minlen = 20, nclust = 3, frameshift = 0.01)
+voiceActivity(x, simple = TRUE, minlen = 50, maxlen = 1000,
+  nclust = 4, frameshift = 0.01)
 }
 \arguments{
 \item{x}{The input Wave object or a matrix obtained by melfcc()}
 
-\item{minlen}{Minimum duration of silence (number of frames)}
+\item{minlen}{Minimum duration of segment (number of frames)}
+
+\item{maxlen}{Maximum duration of segment (number of frames)}
 
 \item{nclust}{Number of clusters, one of which should be silent}
 
@@ -30,4 +33,3 @@ x <- readWave("speech.wav")
 act <- voiceActivity(x)
 }
 }
-
