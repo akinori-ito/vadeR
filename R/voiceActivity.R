@@ -23,27 +23,30 @@ voiceActivity <- function(x,simple=TRUE,minlen=50,maxlen=1000,nclust=4,frameshif
         xf <- x
     }
 
-    # Do clutering on the MFCC 
+    # Do clutering on the MFCC
     cls <- kmeans(xf,nclust)
-    pow <- c(0,0)
+    pow <- rep(0,nclust)
+    nframe <- rep(0,nclust)
     for (cl in 1:nclust) {
         pow[cl] <- mean(xf[cls$cluster==cl,1])
+        nframe[cl] <- sum(cls$cluster==cl)
     }
 
     # the cluster with the least power should be the silence
-    i.silent <- which.min(pow)
+    silent_clusters <- small_mean_cluster_indices(pow,nframe)
+    is_silent <- sapply(cls$cluster,function(x){x %in% silent_clusters})
 
     if (simple) {
-        r <- vadeR_simple(cls,i.silent,minlen)
+        r <- vadeR_simple(is_silent,TRUE,minlen)
     } else {
-        r <- vadeR_heavy(cls,i.silent,minlen,maxlen)
+        r <- vadeR_heavy(is_silent,TRUE,minlen,maxlen)
     }
     attr(r,"frameshift") <- frameshift
     r
 }
 
 vadeR_simple <- function(cls,i.silent,minlen) {
-    dur <- rle(cls$cluster)
+    dur <- rle(cls)
     nsegment <- length(dur$lengths)
     for (i in 1:nsegment) {
         if (dur$lengths[i] < minlen & dur$values[i] == i.silent) {
@@ -68,14 +71,14 @@ vadeR_simple <- function(cls,i.silent,minlen) {
 }
 
 vadeR_heavy <- function(cls,i.silent,minlen,maxlen) {
-    # Caluculate the optimum segmentation with restriction of 
+    # Caluculate the optimum segmentation with restriction of
     # minimum and maximum length of the segment
     # Find the segmentation where each segment satisfies the length constraint
-    # and errors between the cluster decision and the segment decision 
+    # and errors between the cluster decision and the segment decision
     # is minimum
 
     # cluster decision: 1=silence  2=non-silence
-    y <- as.integer(cls$cluster!=i.silent)+1
+    y <- as.integer(cls!=i.silent)+1
 
     # DP array to calculate minimum distance between y and the segmentation
     w <- array(Inf,dim=c(length(y),maxlen,2))
@@ -130,3 +133,25 @@ vadeR_heavy <- function(cls,i.silent,minlen,maxlen) {
    r <- r==2
 }
 
+small_mean_cluster_indices <- function(x,n) {
+  minx <- min(x)
+  maxx <- max(x)
+  x <- (x-minx)/(maxx-minx)
+  n_all <- sum(n)
+  n = n/n_all
+  max_i <- which.max(x)
+  while (n[max_i] < 0.05) {
+    masked <- x
+    masked[x >= 1.0] <- -Inf
+    max_i <- which.max(masked)
+    maxx <- x[max_i]
+    x <- x/maxx
+  }
+  for (i in 1:length(x)){
+    cat("Cluster ",i,": power=",x[i]," frames=",n[i],"\n")
+  }
+
+  # そのクラスタに属するインデックスを返す
+  return(which(x < 0.2))
+
+}
