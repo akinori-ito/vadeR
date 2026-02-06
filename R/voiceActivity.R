@@ -147,9 +147,6 @@ small_mean_cluster_indices <- function(x,n) {
     maxx <- x[max_i]
     x <- x/maxx
   }
-  for (i in 1:length(x)){
-    cat("Cluster ",i,": power=",x[i]," frames=",n[i],"\n")
-  }
 
   # そのクラスタに属するインデックスを返す
   return(which(x < 0.2))
